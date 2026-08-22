@@ -1,0 +1,29 @@
+{
+  "name": "@hotspot-map/ingesters",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/scheduler.ts",
+    "build": "tsup",
+    "start": "node dist/scheduler.js",
+    "ingest:once": "tsx src/run-once.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@hotspot-map/processor": "workspace:*",
+    "@hotspot-map/shared": "workspace:*",
+    "adm-zip": "^0.6.0",
+    "csv-parse": "^7.0.2",
+    "node-cron": "^3.0.3",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/node-cron": "^3.0.11",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

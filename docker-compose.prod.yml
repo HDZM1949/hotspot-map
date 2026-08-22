@@ -1,0 +1,48 @@
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_USER: hotspot
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-hotspot}
+      POSTGRES_DB: hotspot_map
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./infra/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hotspot -d hotspot_map"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    environment:
+      DATABASE_URL: postgres://hotspot:${POSTGRES_PASSWORD:-hotspot}@postgres:5432/hotspot_map
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    depends_on: [api]
+    ports:
+      - "8080:80"
+
+  ingester:
+    build:
+      context: .
+      dockerfile: packages/ingesters/Dockerfile
+    environment:
+      DATABASE_URL: postgres://hotspot:${POSTGRES_PASSWORD:-hotspot}@postgres:5432/hotspot_map
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:

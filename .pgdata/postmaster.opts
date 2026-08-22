@@ -1,0 +1,1 @@
+D:/Deepseek workplace/Newsmap/node_modules/.pnpm/@embedded-postgres+windows-x64@16.14.0-beta.17/node_modules/@embedded-postgres/windows-x64/native/bin/postgres.exe "-D" "D:\deepseek workplace\Newsmap\.pgdata" "-p" "5432"
