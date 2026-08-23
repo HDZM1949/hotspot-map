@@ -1,6 +1,6 @@
 @echo off
-rem HotspotMap 鍚庣鍚姩鑴氭湰
-rem 鏁版嵁搴撹繛鎺ヤ覆榛樿浣跨敤鏈湴宓屽叆寮忓簱锛屽彲閫氳繃鐜鍙橀噺 DATABASE_URL 瑕嗙洊
+rem HotspotMap �������ű�
+rem ���ݿ����Ӵ�Ĭ��ʹ�ñ���Ƕ��ʽ�⣬��ͨ���������� DATABASE_URL ����
 setlocal
 set "ROOT=%~dp0.."
 set "DATABASE_URL=postgres://hotspot:hotspot@localhost:5432/hotspot_map"

@@ -1,5 +1,5 @@
 @echo off
-rem HotspotMap å‰ç«¯å¯åŠ¨è„šæœ¬ï¼ˆVite å¼€å‘æœåŠ¡å™¨ï¼‰
+rem HotspotMap 0¢2„1¤7„1¤7„1¤7„1¤7„1¤7„1¤70–3„1¤7„1¤7„1¤7Vite „1¤7„1¤7„1¤7„1¤7„1¤7„1¤7„1¤7„1¤7„1¤7„1¤7„1¤7„1¤7
 setlocal
 set "ROOT=%~dp0.."
 node "%ROOT%\apps\web\node_modules\vite\bin\vite.js" "%ROOT%\apps\web" >> "%ROOT%\logs\hotspot-web.log" 2>&1
