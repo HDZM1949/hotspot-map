@@ -32,11 +32,20 @@ const [db, api, web] = await Promise.all([checkPort(5432), checkPort(3000), chec
 console.log("ports -> DB 5432:", db, "| API 3000:", api, "| Web 5173:", web);
 
 console.log("API /healthz:", JSON.stringify(await get("http://localhost:3000/healthz")));
-console.log("API events(limit1):", JSON.stringify(await get("http://localhost:3000/api/events?limit=1")));
+console.log(
+  "API events(limit1):",
+  JSON.stringify(await get("http://localhost:3000/api/events?limit=1")),
+);
 console.log("Web index:", JSON.stringify(await get("http://localhost:5173/")));
-console.log("Web proxy events:", JSON.stringify(await get("http://localhost:5173/api/events?limit=1")));
+console.log(
+  "Web proxy events:",
+  JSON.stringify(await get("http://localhost:5173/api/events?limit=1")),
+);
 
 const tileUrl =
   "http://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x=0&y=0&z=1";
 console.log("tile no-referer:", JSON.stringify(await get(tileUrl, 10000)));
-console.log("tile with-referer:", JSON.stringify(await get(tileUrl, 10000, { Referer: "http://localhost:5173/" })));
+console.log(
+  "tile with-referer:",
+  JSON.stringify(await get(tileUrl, 10000, { Referer: "http://localhost:5173/" })),
+);

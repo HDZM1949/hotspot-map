@@ -6,7 +6,8 @@ import type { RawEvent } from "@hotspot-map/shared";
  * 注：本机网络 HTTPS 被拦截时需 NODE_TLS_REJECT_UNAUTHORIZED=0。
  */
 
-const BASE_URL = process.env.USGS_URL ?? "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary";
+const BASE_URL =
+  process.env.USGS_URL ?? "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary";
 
 interface UsgsFeed {
   features: Array<{
@@ -22,12 +23,7 @@ interface UsgsFeed {
   }>;
 }
 
-const FALLBACK_WINDOWS = [
-  "all_hour",
-  "all_day",
-  "all_week",
-  "all_month",
-] as const;
+const FALLBACK_WINDOWS = ["all_hour", "all_day", "all_week", "all_month"] as const;
 
 export async function fetchUsgsEvents(): Promise<RawEvent[]> {
   let lastError: Error | null = null;

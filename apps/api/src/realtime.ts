@@ -69,31 +69,27 @@ export async function registerRealtime(app: FastifyInstance): Promise<void> {
   }
   startListener();
 
-  app.get(
-    "/ws/events",
-    { websocket: true },
-    (connection: WebSocket) => {
-      connected.add(connection);
-      connection.send(JSON.stringify({ type: "hello", message: "connected" } satisfies WsMessage));
+  app.get("/ws/events", { websocket: true }, (connection: WebSocket) => {
+    connected.add(connection);
+    connection.send(JSON.stringify({ type: "hello", message: "connected" } satisfies WsMessage));
 
-      connection.on("message", (raw) => {
-        // M3 简化：客户端暂不发送订阅指令（全量推送），保留协议扩展点
-        try {
-          const msg = JSON.parse(raw.toString()) as { type?: string };
-          if (msg.type === "ping") {
-            connection.send(JSON.stringify({ type: "pong" } satisfies WsMessage));
-          }
-        } catch {
-          // 忽略无法解析的消息
+    connection.on("message", (raw) => {
+      // M3 简化：客户端暂不发送订阅指令（全量推送），保留协议扩展点
+      try {
+        const msg = JSON.parse(raw.toString()) as { type?: string };
+        if (msg.type === "ping") {
+          connection.send(JSON.stringify({ type: "pong" } satisfies WsMessage));
         }
-      });
+      } catch {
+        // 忽略无法解析的消息
+      }
+    });
 
-      connection.on("close", () => {
-        connected.delete(connection);
-      });
-      connection.on("error", () => {
-        connected.delete(connection);
-      });
-    },
-  );
+    connection.on("close", () => {
+      connected.delete(connection);
+    });
+    connection.on("error", () => {
+      connected.delete(connection);
+    });
+  });
 }

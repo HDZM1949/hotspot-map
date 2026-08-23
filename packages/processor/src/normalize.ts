@@ -56,16 +56,18 @@ export function normalizeEvent(raw: RawEvent): NewEvent | null {
   if (!raw.lat || !raw.lon || !isValidCoord(raw.lat, raw.lon)) {
     return null;
   }
-  const occurredAt = raw.occurredAt instanceof Date && !Number.isNaN(raw.occurredAt.getTime())
-    ? raw.occurredAt
-    : new Date();
+  const occurredAt =
+    raw.occurredAt instanceof Date && !Number.isNaN(raw.occurredAt.getTime())
+      ? raw.occurredAt
+      : new Date();
   const now = new Date();
   return {
     fingerprint: fingerprint(raw.source, raw.sourceId),
     title: cleanText(raw.title) || `[${raw.source}] 未命名事件`,
     summary: raw.summary ? cleanText(raw.summary) : null,
     category: raw.category ?? FALLBACK_CATEGORY,
-    severity: raw.severity !== undefined && raw.severity >= 0 && raw.severity <= 1 ? raw.severity : null,
+    severity:
+      raw.severity !== undefined && raw.severity >= 0 && raw.severity <= 1 ? raw.severity : null,
     // M1 简化热度分：0（M2 实现源权重×时效衰减×提及数）
     heatScore: 0,
     lat: raw.lat,

@@ -67,4 +67,3 @@ export interface WSMessage {
   type: "events:new" | "events:update" | "events:expire";
   payload: NormalizedEvent[];
 }
-

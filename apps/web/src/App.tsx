@@ -259,7 +259,15 @@ export default function App() {
         source: "events",
         filter: ["has", "point_count"],
         paint: {
-          "circle-color": ["step", ["get", "point_count"], "#3b82f6", 10, "#8b5cf6", 100, "#ef4444"],
+          "circle-color": [
+            "step",
+            ["get", "point_count"],
+            "#3b82f6",
+            10,
+            "#8b5cf6",
+            100,
+            "#ef4444",
+          ],
           "circle-radius": ["step", ["get", "point_count"], 18, 10, 26, 100, 36],
           "circle-opacity": 0.7,
           "circle-stroke-width": 2,
@@ -446,7 +454,7 @@ export default function App() {
                 className={`chip ${source === s ? "active" : ""}`}
                 onClick={() => setSource(s)}
               >
-                {s === "全部" ? "全部来源" : SOURCE_LABELS[s] ?? s}
+                {s === "全部" ? "全部来源" : (SOURCE_LABELS[s] ?? s)}
               </button>
             ))}
           </div>

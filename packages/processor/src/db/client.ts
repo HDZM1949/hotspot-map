@@ -9,7 +9,8 @@ let cached: ReturnType<typeof createDb> | null = null;
 
 function createDb() {
   const pool = new pg.Pool({
-    connectionString: process.env.DATABASE_URL ?? "postgres://hotspot:hotspot@localhost:5432/hotspot_map",
+    connectionString:
+      process.env.DATABASE_URL ?? "postgres://hotspot:hotspot@localhost:5432/hotspot_map",
     max: 10,
   });
   return drizzle(pool, { schema });

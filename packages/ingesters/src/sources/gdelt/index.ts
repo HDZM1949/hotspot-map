@@ -31,7 +31,9 @@ const GDELT_BASE_URL = process.env.GDELT_BASE_URL ?? "https://data.gdeltproject.
 
 /** lastupdate.txt 首行格式: <count> <md5> <export.csv.zip url> */
 async function fetchLatestExportUrl(): Promise<string> {
-  const res = await fetch(`${GDELT_BASE_URL}/lastupdate.txt`, { signal: AbortSignal.timeout(30_000) });
+  const res = await fetch(`${GDELT_BASE_URL}/lastupdate.txt`, {
+    signal: AbortSignal.timeout(30_000),
+  });
   if (!res.ok) {
     throw new Error(`GDELT lastupdate.txt 请求失败: ${res.status}`);
   }

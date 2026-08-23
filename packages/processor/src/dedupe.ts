@@ -23,7 +23,10 @@ export function haversineKm(lat1: number, lon1: number, lat2: number, lon2: numb
 
 /** 标题归一化：小写、去标点符号 */
 function normalizeTitle(title: string): string {
-  return title.toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, "").trim();
+  return title
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s]/gu, "")
+    .trim();
 }
 
 /** Levenshtein 编辑距离（截断前 40 字符控制开销） */
@@ -95,7 +98,10 @@ export async function findSimilarEvent(
     .limit(20);
 
   for (const c of candidates) {
-    if (haversineKm(c.lat, c.lon, event.lat, event.lon) <= MAX_DISTANCE_KM && titlesSimilar(c.title, event.title)) {
+    if (
+      haversineKm(c.lat, c.lon, event.lat, event.lon) <= MAX_DISTANCE_KM &&
+      titlesSimilar(c.title, event.title)
+    ) {
       return c;
     }
   }

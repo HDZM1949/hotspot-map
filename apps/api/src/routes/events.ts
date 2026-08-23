@@ -24,7 +24,9 @@ export async function registerEventRoutes(app: FastifyInstance) {
   app.get("/api/events", async (req, reply) => {
     const parsed = EventQuerySchema.safeParse(req.query);
     if (!parsed.success) {
-      return reply.code(400).send({ error: "参数校验失败", details: parsed.error.flatten().fieldErrors });
+      return reply
+        .code(400)
+        .send({ error: "参数校验失败", details: parsed.error.flatten().fieldErrors });
     }
     const q = parsed.data;
     // 钳制到合法地理范围，防止越界值导致查询语义错误
@@ -47,7 +49,10 @@ export async function registerEventRoutes(app: FastifyInstance) {
       conditions.push(or(ilike(schema.events.title, like), ilike(schema.events.summary, like))!);
     }
     if (q.source) {
-      const sources = q.source.split(",").map((s) => s.trim()).filter(Boolean);
+      const sources = q.source
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
       if (sources.length > 0) {
         conditions.push(
           exists(

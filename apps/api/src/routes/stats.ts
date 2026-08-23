@@ -7,9 +7,7 @@ export async function registerStatsRoutes(app: FastifyInstance) {
   app.get("/api/stats/summary", async () => {
     const db = getDb();
 
-    const [totalRow] = await db
-      .select({ count: sql<number>`count(*)::int` })
-      .from(schema.events);
+    const [totalRow] = await db.select({ count: sql<number>`count(*)::int` }).from(schema.events);
 
     const byCategory = await db
       .select({

@@ -5,9 +5,15 @@ import http from "node:http";
 function checkPort(port) {
   return new Promise((resolve) => {
     const s = net.connect({ port, host: "127.0.0.1" });
-    s.on("connect", () => { s.destroy(); resolve(true); });
+    s.on("connect", () => {
+      s.destroy();
+      resolve(true);
+    });
     s.on("error", () => resolve(false));
-    s.setTimeout(3000, () => { s.destroy(); resolve(false); });
+    s.setTimeout(3000, () => {
+      s.destroy();
+      resolve(false);
+    });
   });
 }
 
@@ -19,7 +25,10 @@ function get(url, timeout = 8000) {
       res.on("end", () => resolve(res.statusCode));
     });
     req.on("error", () => resolve("ERR"));
-    req.setTimeout(timeout, () => { req.destroy(); resolve("TIMEOUT"); });
+    req.setTimeout(timeout, () => {
+      req.destroy();
+      resolve("TIMEOUT");
+    });
   });
 }
 

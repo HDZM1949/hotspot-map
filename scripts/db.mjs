@@ -15,7 +15,8 @@ const port = Number(process.env.PG_PORT ?? 5432);
 const user = process.env.PG_USER ?? "hotspot";
 const password = process.env.PG_PASSWORD ?? "hotspot";
 const dbName = process.env.PG_DATABASE ?? "hotspot_map";
-const schemaFile = process.env.PG_SCHEMA_FILE ?? path.join(rootDir, "infra", "postgres", "init.sql");
+const schemaFile =
+  process.env.PG_SCHEMA_FILE ?? path.join(rootDir, "infra", "postgres", "init.sql");
 
 // 数据库名用于 CREATE DATABASE 语句（不能参数化），仅允许安全字符
 if (!/^[a-zA-Z0-9_]+$/.test(dbName)) {

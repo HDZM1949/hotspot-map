@@ -1,5 +1,12 @@
 // 最终状态确认
-const t = async (u) => { try { const r = await fetch(u, { signal: AbortSignal.timeout(5000) }); return r.status; } catch { return "ERR"; } };
+const t = async (u) => {
+  try {
+    const r = await fetch(u, { signal: AbortSignal.timeout(5000) });
+    return r.status;
+  } catch {
+    return "ERR";
+  }
+};
 const api = await t("http://localhost:3000/readyz");
 const web = await t("http://localhost:5173/");
 const stats = await (await fetch("http://localhost:3000/api/stats/summary")).json();
