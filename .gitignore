@@ -3,7 +3,7 @@ dist/
 .turbo/
 .next/
 logs/
-.pdata/
+.pgdata/
 tmp/
 .env
 .env.*
