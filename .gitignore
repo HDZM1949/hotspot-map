@@ -7,3 +7,6 @@ logs/
 tmp/
 .env
 .env.*
+
+# 本机专用（HTTPS被拦截环境），不随项目发布
+scripts/start-ingest-local.bat
