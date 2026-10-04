@@ -41,6 +41,7 @@ export async function fetchEvents(
   category?: string,
   source?: string,
   q?: string,
+  from?: string,
 ): Promise<MapEvent[]> {
   const [west, south, east, north] = bbox;
   const params = new URLSearchParams({
@@ -53,6 +54,7 @@ export async function fetchEvents(
   if (category) params.set("category", category);
   if (source) params.set("source", source);
   if (q) params.set("q", q);
+  if (from) params.set("from", from);
   const res = await fetch(`/api/events?${params}`);
   if (!res.ok) throw new Error(`API ${res.status}`);
   return res.json() as Promise<MapEvent[]>;

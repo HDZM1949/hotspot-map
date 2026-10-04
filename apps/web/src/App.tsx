@@ -75,6 +75,28 @@ function escapeHtml(text: string): string {
 
 type ViewMode = "cluster" | "heat";
 
+/** 时间范围筛选 */
+type TimeRange = "all" | "today" | "3d" | "7d";
+const TIME_RANGE_OPTIONS: { key: TimeRange; label: string }[] = [
+  { key: "all", label: "全部" },
+  { key: "today", label: "今天" },
+  { key: "3d", label: "近三天" },
+  { key: "7d", label: "一周内" },
+];
+
+/** 将时间范围转换为查询起始时间（ISO 字符串）；"全部" 返回 undefined */
+function rangeToFrom(range: TimeRange): string | undefined {
+  const now = Date.now();
+  if (range === "today") {
+    const d = new Date(now);
+    d.setHours(0, 0, 0, 0);
+    return d.toISOString();
+  }
+  if (range === "3d") return new Date(now - 3 * 86_400_000).toISOString();
+  if (range === "7d") return new Date(now - 7 * 86_400_000).toISOString();
+  return undefined;
+}
+
 export default function App() {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
@@ -84,6 +106,7 @@ export default function App() {
 
   const [category, setCategory] = useState("全部");
   const [source, setSource] = useState("全部");
+  const [range, setRange] = useState<TimeRange>("all");
   const [q, setQ] = useState("");
   const [debouncedQ, setDebouncedQ] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>("cluster");
@@ -93,6 +116,9 @@ export default function App() {
   const [status, setStatus] = useState("加载中…");
   /** 最新事件列表引用（供实时合并与地图增量更新） */
   const eventsRef = useRef<MapEvent[]>([]);
+  /** 当前时间范围（供实时合并时过滤，保持实时回调稳定、不重连） */
+  const rangeRef = useRef<TimeRange>(range);
+  rangeRef.current = range;
 
   // 搜索词防抖 400ms
   useEffect(() => {
@@ -102,9 +128,13 @@ export default function App() {
 
   /** 实时事件到达：按 id 去重合并 → 按热度重排 → 更新地图与列表 */
   const handleRealtime = useCallback((newEvents: MapEvent[]) => {
+    const fromIso = rangeToFrom(rangeRef.current);
+    const fromMs = fromIso ? Date.parse(fromIso) : Number.NEGATIVE_INFINITY;
     const map = new Map(eventsRef.current.map((e) => [e.id, e]));
     let added = 0;
     for (const e of newEvents) {
+      // 仅合并落在当前时间范围内的事件
+      if (Date.parse(e.occurredAt) < fromMs) continue;
       if (!map.has(e.id)) {
         map.set(e.id, e);
         added++;
@@ -171,6 +201,7 @@ export default function App() {
         category === "全部" ? undefined : category,
         source === "全部" ? undefined : source,
         debouncedQ.trim() || undefined,
+        rangeToFrom(range),
       );
       eventsRef.current = list;
       setEvents(list);
@@ -179,7 +210,7 @@ export default function App() {
     } catch (e) {
       setStatus(`加载失败: ${(e as Error).message}`);
     }
-  }, [category, source, debouncedQ]);
+  }, [category, source, debouncedQ, range]);
 
   // 始终引用最新的 loadEvents（地图生命周期只初始化一次）
   const loadRef = useRef(loadEvents);
@@ -436,6 +467,17 @@ export default function App() {
         </div>
 
         <div className="filters">
+          <div className="filter-group">
+            {TIME_RANGE_OPTIONS.map((o) => (
+              <button
+                key={o.key}
+                className={`chip ${range === o.key ? "active" : ""}`}
+                onClick={() => setRange(o.key)}
+              >
+                {o.label}
+              </button>
+            ))}
+          </div>
           <div className="filter-group">
             {["全部", ...Object.keys(CATEGORY_LABELS)].map((c) => (
               <button

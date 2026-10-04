@@ -14,6 +14,7 @@ export { haversineKm, findSimilarEvent, titlesSimilar } from "./dedupe";
 export type { NewEvent } from "./normalize";
 export { fingerprint, normalizeEvent } from "./normalize";
 export { computeHeatScore } from "./score";
+export { pruneOldEvents, RETENTION_DAYS } from "./retention";
 export { upsertEvent } from "./writer";
 export type { ProcessedEvent } from "./types";
 

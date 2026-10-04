@@ -38,3 +38,6 @@ CREATE TABLE IF NOT EXISTS event_mentions (
   fetched_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   UNIQUE (source, source_id)               -- 幂等写入，天然防重复采集
 );
+
+-- 外键索引：加速按 event_id 的查询与「删除旧事件」时的级联清理
+CREATE INDEX IF NOT EXISTS idx_mentions_event ON event_mentions (event_id);

@@ -1,4 +1,4 @@
-import { processRawEvents } from "@hotspot-map/processor";
+import { processRawEvents, pruneOldEvents, RETENTION_DAYS } from "@hotspot-map/processor";
 import type { RawEvent } from "@hotspot-map/shared";
 
 import { fetchEonetEvents } from "./sources/eonet";
@@ -36,6 +36,16 @@ for (const name of enabled) {
   } catch (e) {
     console.error(`[ingest] ${name} 失败:`, (e as Error).message);
   }
+}
+
+// 顺带清理超过保留期的旧事件
+try {
+  const removed = await pruneOldEvents();
+  if (removed > 0) {
+    console.info(`[retention] 已清理 ${removed} 条超过 ${RETENTION_DAYS} 天的旧事件`);
+  }
+} catch (e) {
+  console.error("[retention] 清理失败:", (e as Error).message);
 }
 
 process.exit(0);
